@@ -1,0 +1,183 @@
+// сбрасываем стандартные стили браузера и добовляем псевдо элементы чтобы для них тоже сбросились марджины и падинги
+*, ::after, ::before
+    margin: 0
+    padding: 0
+    box-sizing: border-box
+
+// Задаем размер шрифта для html чтобы сделать размер 10px=1rem
+html
+    font-size: 62.5%
+
+body
+    // подключаем шрифты ко всем нашим тегам
+    font-family: "Roboto"
+    font-weight: 400
+    color: #777777
+    font-size: 1.6rem
+    letter-spacing: .2rem
+    // задаем размер отступов и цвет на странице для рамки(container)
+    padding: 5rem
+    background-color: white
+
+.container
+    background-color: #F7F7F7
+
+.header
+    position: relative
+    // делаем высоту во всю высоту экрана
+    height: 95vh
+    // добавляем фото
+    background: linear-gradient(90.05deg, rgba(186, 133, 84, 0.7) 0.03%, rgba(1, 1, 1, 0.7) 99.94%), url(../img/header-background.jpg) center / cover no-repeat
+    // обрезаем фото
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 80%)
+    &__logo
+        position: absolute
+        left: 5rem
+        top: 5rem
+        height: 7rem
+        width: 5.6rem
+    &__box
+        // Задаем значения чтобы выравнять наш заголовок h1 по центру
+        position: absolute
+        top: 40%
+        left: 50%
+        // Это и есть хитрость
+        transform: translate(-50%, -50%)
+        // так как текст не на всю ширину - исправляем это
+        width: 100%
+        // после этого текст сбился - выравниваем его
+        text-align: center
+
+.title-first
+    color: #FFFFFF
+    &__main
+        // Делаем элемент блочным, чтобы автоматом переносились на другую строчку
+        display: block
+        font-weight: 800
+        font-size: 5rem
+        line-height: 6rem
+        letter-spacing: 1rem
+        // Чтобы текст в любом случае был большими буквами
+        text-transform: uppercase
+        margin-bottom: 1rem
+        // Применяем нашу анимацию к заголовку
+        animation-name: leftToRight
+        // задаем продолжительность нашей анимации
+        animation-duration: 1.7s
+        // задаем не большую задержку анимации чтобы наш сайт успел прогрузится
+        animation-delay: 1s
+        // анимация ускоряется и плавно замедляется
+        animation-timing-function: ease
+        // Помогает нормализовать поведение нашей анимации
+        backface-visibility: hidden
+    &__secondary
+        // Делаем элемент блочным чтобы автоматом переносились на другую строчку
+        display: block
+        font-weight: 100
+        font-size: 4rem
+        line-height: 4.8rem
+        letter-spacing: .5rem
+        // анимация
+        animation-name: rightToLeft
+        animation-duration: 1.7s
+        animation-delay: 1s
+        animation-timing-function: ease
+        backface-visibility: hidden
+        // отодвигаем кнопку
+        margin-bottom: 5rem
+
+// Кнопка
+.btn
+    // стилизуем отдельное состояние ссылки
+    &:link, &:visited
+        // делаем текст большими буквами
+        text-transform: uppercase
+        // убираем визуальные эффекты с текста
+        text-decoration: none
+        color: #777777
+        padding: 1.5rem 4rem
+        background: white
+        border-radius: 5rem
+        // так как наша кнопка заползает на текст - задаем ей
+        display: inline-block
+        // длительность трансформации анимации(которую мы задали ниже)
+        transition: all .3s
+        // чтобы сработал псевдо эллемен ::after задаем свойство position: relative для нашей кнопки
+        position: relative
+        font-size: 2rem
+
+    // добавляем анимацию нашей кнопке, обрашяемся к псевдо классам
+    &:hover
+        transform: translateY(-3px)
+        // добовляем тень кнопке
+        box-shadow: (0px 4px 4px rgba(0, 0, 0, 0.3))
+        // прикручивае к псевдо эллементу псевдо класс чтобы заработала наша анимация
+        &::after
+            // чтобы эллемент постепенно увеличевался и в конце исчезал
+            opacity: 0
+            // чтобы кнопка увеличелась 
+            transform: scaleX(1.5) scaleY(1.7)
+    &:active
+        transform: translateY(-2px)
+        // и принажатии кнопки можем немного тень убрать
+        box-shadow: (0px 4px 4px rgba(0, 0, 0, 0.1))
+
+    // используем псевдоэлементы чтобы сделать взрывной эффект кнопки
+    &::after
+        // свойство без которого псевдо эллемент не работает
+        content: ""
+        // прописывае стили нашей кнопки
+        background: white
+        width: 100%
+        height: 100%
+        border-radius: 5rem
+        display: inline-block
+        // размещаем наш псевдо эллемент по центру
+        position: absolute
+        top: 0
+        left: 0
+        z-index: -1
+        transition: all .4s
+    
+    // задаем параметры анимации для кнопки на первой странице
+    &_animated
+        animation: btnToUp .5s ease-out .7s
+        animation-fill-mode: backwards
+
+        
+
+// Создаем анимацию для заголовка первой страницы и даем ей имя
+@keyframes leftToRight
+    //Прописываем ключевые точки на каком этапном проценте будет происходить то или инное действие
+    0%
+        // прописываем то что у нас будет происходить в этих точках
+        // прописывае чтобы наш заголовок появлялся плавно
+        opacity: 0
+        // заставляем наш заголовок немного двигаться
+        transform: translateX(-10rem)
+    // чтобы на 80% наш заголовок заходил чуть дальше а потом возвращался обратно
+    80%
+        transform: translateX(1rem)
+    100%
+        opacity: 1
+        transform: translateX(0rem)
+
+// Создаем анимацию для заголовка первой страницы и даем ей имя
+@keyframes rightToLeft
+    0%
+        opacity: 0
+        transform: translateX(10rem)
+    80%
+        transform: translateX(-1rem)
+    100%
+        opacity: 1
+        transform: translateX(0rem)
+
+// Создаем анимацию для кнопки первой страницы и даем ей имя
+@keyframes btnToUp
+    0%
+        opacity: 0
+        transform: translateY(5rem)
+    100%
+        opacity: 1
+        transform: translateY(0rem)
